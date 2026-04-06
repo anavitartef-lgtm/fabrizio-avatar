@@ -6,7 +6,7 @@
   <title>Avatar de Fabrizio · Peruvian Health</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
+ 
     body {
       min-height: 100vh;
       background: #F5F0E8;
@@ -15,7 +15,7 @@
       flex-direction: column;
       align-items: center;
     }
-
+ 
     /* HEADER */
     .header {
       width: 100%;
@@ -43,7 +43,7 @@
       background: #7AB648;
       box-shadow: 0 0 6px #7AB648;
     }
-
+ 
     /* CHAT */
     .chat-area {
       flex: 1;
@@ -55,7 +55,7 @@
       gap: 16px;
       overflow-y: auto;
     }
-
+ 
     /* EMPTY STATE */
     .empty-state {
       display: flex; flex-direction: column;
@@ -75,7 +75,7 @@
       transition: background 0.15s;
     }
     .suggestion-btn:hover { background: #EEF5E4; }
-
+ 
     /* MESSAGES */
     .message-row {
       display: flex; align-items: flex-end; gap: 8px;
@@ -104,7 +104,7 @@
       background: white; color: #2A3D1C;
       border-radius: 18px 18px 18px 4px;
     }
-
+ 
     /* TYPING */
     .typing-dots { display: flex; gap: 5px; align-items: center; padding: 14px 18px; }
     .dot {
@@ -118,7 +118,7 @@
       0%, 100% { opacity: 0.3; transform: scale(0.8); }
       50% { opacity: 1; transform: scale(1); }
     }
-
+ 
     /* INPUT */
     .input-area {
       width: 100%; max-width: 680px;
@@ -156,7 +156,7 @@
   </style>
 </head>
 <body>
-
+ 
 <div class="header">
   <div class="avatar-icon">🌿</div>
   <div class="header-text">
@@ -165,7 +165,7 @@
   </div>
   <div class="online-dot"></div>
 </div>
-
+ 
 <div class="chat-area" id="chat">
   <div class="empty-state" id="emptyState">
     <div class="big-icon">🌿</div>
@@ -178,23 +178,23 @@
     </div>
   </div>
 </div>
-
+ 
 <div class="input-area">
   <div class="input-wrap">
     <textarea id="userInput" rows="1" placeholder="Escríbele a Fabrizio..." onkeydown="handleKey(event)" oninput="adjustHeight(this); updateBtn()"></textarea>
   </div>
   <button class="send-btn" id="sendBtn" onclick="sendMessage()">↑</button>
 </div>
-
+ 
 <div id="bottomAnchor"></div>
-
+ 
 <script>
 const SYSTEM_PROMPT = `Eres Fabrizio Anavitarte, CEO y co-fundador de Peruvian Health (razón social: Peruvian's Cook SAC), una empresa peruana de productos naturales con ~10 años de operación. Generas alrededor de 400–500k soles/mes con ~50 clientes B2B activos.
-
+ 
 IMPORTANTE: Eres un avatar de Fabrizio. Si alguien pregunta quién eres, di algo como: "Soy el avatar de Fabrizio — una versión de IA entrenada con su forma de pensar y liderar Peruvian Health. No soy él en persona, pero puedo ayudarte a tomar decisiones como él lo haría."
-
+ 
 ---
-
+ 
 EQUIPO ACTUAL:
 - Rodrigo Anavitarte: Co-director, Operaciones y Administración
 - Lesly Garcia: Marketing & Ventas Manager
@@ -205,141 +205,141 @@ EQUIPO ACTUAL:
 - Karen: Ejecutiva de ventas B2B
 - Sofía y Xiomara: Atención al cliente
 - Miguel Ángel: Ventas B2B
-
+ 
 ---
-
+ 
 FILOSOFÍA Y VALORES DE MARCA:
 - Peruvian Health es un aliado silencioso del bienestar — no activista, no dominante. Filosofía Taoísta/Zen.
 - Valores: honestidad, integridad, calidad holística, responsabilidad ambiental.
 - Filosofía de ventas: "informas o transformas."
 - Filosofía de equipo: el ego y la victimización son los principales obstáculos; el error es oportunidad.
 - Slow productivity: hacer menos pero mejor.
-
+ 
 ---
-
+ 
 CONTEXTO COMERCIAL:
 - Aceite de coco = ~80% de los ingresos.
 - Estrategia 2026: gomitas (apple cider vinegar, creatina, melatonina) en supermercados.
 - InkaFarma es ~30% de las ventas. El cierre del deal de gomitas con InkaFarma es la prioridad #1 de los próximos 90 días.
 - Prioridades 2026: tiempos de entrega de 3 días hábiles, lanzamiento de gomitas en supermercados, programa de afiliados TikTok.
-
+ 
 ---
-
+ 
 CÓMO RESPONDER:
 - Habla como Fabrizio: directo, cálido, sin lenguaje corporativo.
 - Cuando la pregunta es filosófica o de manejo de personas, responde con profundidad humana.
 - Cuando la pregunta es operativa, sé práctico y concreto.
 - Usa español por defecto. Si alguien escribe en inglés, responde en inglés.
 - Respuestas concisas pero completas. Sin paja.
-
+ 
 ---
-
+ 
 CUÁNDO ESCALAR A FABRIZIO:
 1. Decisiones con montos muy grandes o inversiones no presupuestadas
 2. Contrataciones o desvinculaciones de personal
 3. Nuevos productos o líneas de negocio
 4. Alianzas estratégicas importantes
 5. Temas legales o contractuales
-
+ 
 PROTOCOLO: Si la situación es de alto nivel, pregunta: "¿Y qué vas a hacer exactamente?" Si la respuesta es vaga, di: "Para esta decisión, te recomiendo consultarlo directamente con Fabrizio."`;
-
+ 
 let messages = [];
-
+ 
 function useSuggestion(btn) {
   document.getElementById('userInput').value = btn.textContent;
   updateBtn();
   sendMessage();
 }
-
+ 
 function adjustHeight(el) {
   el.style.height = 'auto';
   el.style.height = Math.min(el.scrollHeight, 120) + 'px';
 }
-
+ 
 function updateBtn() {
   const val = document.getElementById('userInput').value.trim();
   const btn = document.getElementById('sendBtn');
   btn.classList.toggle('active', val.length > 0);
 }
-
+ 
 function handleKey(e) {
   if (e.key === 'Enter' && !e.shiftKey) {
     e.preventDefault();
     sendMessage();
   }
 }
-
+ 
 function scrollToBottom() {
   document.getElementById('bottomAnchor').scrollIntoView({ behavior: 'smooth' });
 }
-
+ 
 function addMessage(role, content) {
   const chat = document.getElementById('chat');
   const empty = document.getElementById('emptyState');
   if (empty) empty.remove();
-
+ 
   const row = document.createElement('div');
   row.className = `message-row ${role}`;
-
+ 
   if (role === 'assistant') {
     const icon = document.createElement('div');
     icon.className = 'msg-avatar';
     icon.textContent = '🌿';
     row.appendChild(icon);
   }
-
+ 
   const bubble = document.createElement('div');
   bubble.className = `bubble ${role}`;
   bubble.textContent = content;
   row.appendChild(bubble);
-
+ 
   chat.appendChild(row);
   scrollToBottom();
   return bubble;
 }
-
+ 
 function showTyping() {
   const chat = document.getElementById('chat');
   const row = document.createElement('div');
   row.className = 'message-row assistant';
   row.id = 'typingRow';
-
+ 
   const icon = document.createElement('div');
   icon.className = 'msg-avatar';
   icon.textContent = '🌿';
-
+ 
   const bubble = document.createElement('div');
   bubble.className = 'bubble assistant';
   bubble.innerHTML = '<div class="typing-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>';
-
+ 
   row.appendChild(icon);
   row.appendChild(bubble);
   chat.appendChild(row);
   scrollToBottom();
 }
-
+ 
 function removeTyping() {
   const row = document.getElementById('typingRow');
   if (row) row.remove();
 }
-
+ 
 async function sendMessage() {
   const input = document.getElementById('userInput');
   const text = input.value.trim();
   if (!text) return;
-
+ 
   input.value = '';
   input.style.height = 'auto';
   updateBtn();
-
+ 
   messages.push({ role: 'user', content: text });
   addMessage('user', text);
   showTyping();
-
+ 
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': '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', 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+      headers: { 'Content-Type': 'application/json', 'x-api-key': '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', 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 1000,
@@ -347,7 +347,7 @@ async function sendMessage() {
         messages: messages,
       })
     });
-
+ 
     const data = await response.json();
     const reply = data.content?.map(b => b.text || '').join('') || 'No pude generar una respuesta.';
     messages.push({ role: 'assistant', content: reply });
@@ -361,3 +361,4 @@ async function sendMessage() {
 </script>
 </body>
 </html>
+ 
